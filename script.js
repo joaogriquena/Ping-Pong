@@ -4,25 +4,21 @@ const canvasEl = document.querySelector('canvas'),
 const lineWidth = 15
 
 function setup() {
-    canvasEl.width = window.innerWidth
-    canvasEl.height = window.innerHeight
-
-    canvasCtx.width = canvasEl.width
-    canvasCtx.height = canvasEl.height
+    canvasEl.width = canvasCtx.width = window.innerWidth
+    canvasEl.height = canvasCtx.height = window.innerHeight
 }
 
 function draw() {
+    // desenhando o corpo
     canvasCtx.fillStyle = "#286047"
     canvasCtx.fillRect(0, 0, window.innerWidth, window.innerHeight)
 
     canvasCtx.fillStyle = "#fff"
 
-    const x = window.innerWidth / 2 - lineWidth / 2
-    const y = 0
-    const w = lineWidth
-    const h = window.innerHeight
-
-    canvasCtx.fillRect(x, y, w, h)
+    // desenhando a linha central
+    canvasCtx.fillRect(
+        window.innerWidth / 2 - lineWidth / 2, 0, lineWidth, window.innerHeight
+    )
 }
 
 setup()
