@@ -25,6 +25,11 @@ function draw() {
 
     // desenhando a raquete esquerda
     canvasCtx.fillRect(window.innerWidth - lineWidth - 10, 200, lineWidth, 200)
+
+    // desenhando a bolinha
+    canvasCtx.beginPath()
+    canvasCtx.arc(300, 300, 20, 0, 2 * Math.PI, false)
+    canvasCtx.fill()
 }
 
 setup()
