@@ -3,22 +3,34 @@ const canvasEl = document.querySelector('canvas'),
 
 const lineWidth = 15
 
+const field = {
+    w: window.innerWidth,
+    h: window.innerHeight,
+    draw: function () {
+        // desenhando o corpo
+        canvasCtx.fillStyle = "#286047"
+        canvasCtx.fillRect(0, 0, this.w, this.h)
+    }
+}
+
+const line = {
+    w: 15,
+    h: field.h,
+    draw: function () {
+        canvasCtx.fillStyle = "#fff"
+        // desenhando a linha central
+        canvasCtx.fillRect(field.w / 2 - this.w / 2, 0, this.w, this.h)
+    },
+}
+
 function setup() {
-    canvasEl.width = canvasCtx.width = window.innerWidth
-    canvasEl.height = canvasCtx.height = window.innerHeight
+    canvasEl.width = canvasCtx.width = field.w
+    canvasEl.height = canvasCtx.height = field.h
 }
 
 function draw() {
-    // desenhando o corpo
-    canvasCtx.fillStyle = "#286047"
-    canvasCtx.fillRect(0, 0, window.innerWidth, window.innerHeight)
-
-    canvasCtx.fillStyle = "#fff"
-
-    // desenhando a linha central
-    canvasCtx.fillRect(
-        window.innerWidth / 2 - lineWidth / 2, 0, lineWidth, window.innerHeight
-    )
+    field.draw()
+    line.draw()
 
     // desenhando a raquete esquerda
     canvasCtx.fillRect(10, 100, lineWidth, 200)
