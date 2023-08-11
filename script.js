@@ -2,7 +2,7 @@ const canvasEl = document.querySelector('canvas'),
     canvasCtx = canvasEl.getContext('2d')
 gapX = 10
 
-const lineWidth = 15
+
 
 const field = {
     w: window.innerWidth,
@@ -66,12 +66,19 @@ const ball = {
     x: 300,
     y: 200,
     r: 20,
+    speed: 10,
+    _move: function () {
+        this.x += 1 * this.speed
+        this.y += 1 * this.speed
+    },
     draw: function () {
         // desenhando a bolinha
         canvasCtx.fillStyle = "#fff"
         canvasCtx.beginPath()
         canvasCtx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false)
         canvasCtx.fill()
+
+        this._move()
     }
 }
 
@@ -89,5 +96,19 @@ function draw() {
     ball.draw()
 }
 
+window.animateFrame = (function () {
+    return (
+        window.requestAnimationFrame ||
+        function (callback) {
+            return window.setTimeout(callback, 1000 / 60);
+        }
+    )
+})()
+
+function main() {
+    animateFrame(main)
+    draw()
+}
+
 setup()
-draw()
+main()
