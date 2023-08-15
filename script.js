@@ -2,7 +2,7 @@ const canvasEl = document.querySelector('canvas'),
     canvasCtx = canvasEl.getContext('2d')
 gapX = 10
 
-
+const mouse = { x: 0, y: 0 }
 
 const field = {
     w: window.innerWidth,
@@ -29,10 +29,15 @@ const leftPaddle = {
     y: 0,
     w: line.w,
     h: 200,
+    _move: function () {
+        this.y = mouse.y - this.h / 2
+    },
     // desenhando a raquete esquerda
     draw: function () {
         canvasCtx.fillStyle = "#fff"
         canvasCtx.fillRect(this.x, this.y, this.w, this.h)
+
+        this._move()
     }
 }
 
@@ -41,10 +46,15 @@ const rightPaddle = {
     y: 100,
     w: line.w,
     h: 200,
+    _move: function () {
+        this.y = ball.y
+    },
     // desenhando a raquete Direita
     draw: function () {
         canvasCtx.fillStyle = "#fff"
         canvasCtx.fillRect(this.x, this.y, this.w, this.h)
+
+        this._move()
     }
 }
 
@@ -63,13 +73,31 @@ const score = {
 }
 
 const ball = {
-    x: 300,
-    y: 200,
+    x: 0,
+    y: 0,
     r: 20,
     speed: 10,
+    directionX: 1,
+    directionY: 1,
+    _calcPosition: function () {
+        // Verifica as laterais superiores e inferiores do campo
+        if (
+            (this.y - this.r < 0 && this.directionY < 0) ||
+            (this.y > field.h - this.r && this.directionY > 0)
+        ) {
+            // Rebate a bola invertendo o sinal do eixo y
+            this._reverseY()
+        }
+    },
+    _reverseX: function () {
+        this.directionX *= -1
+    },
+    _reverseY: function () {
+        this.directionY = this.directionY * -1
+    },
     _move: function () {
-        this.x += 1 * this.speed
-        this.y += 1 * this.speed
+        this.x += this.directionX * this.speed
+        this.y += this.directionY * this.speed
     },
     draw: function () {
         // desenhando a bolinha
@@ -78,6 +106,7 @@ const ball = {
         canvasCtx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false)
         canvasCtx.fill()
 
+        this._calcPosition()
         this._move()
     }
 }
@@ -112,3 +141,8 @@ function main() {
 
 setup()
 main()
+
+canvasEl.addEventListener('mousemove', function (e) {
+    mouse.x = e.pageX
+    mouse.y = e.pageY
+})
