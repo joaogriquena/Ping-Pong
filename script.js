@@ -43,11 +43,19 @@ const leftPaddle = {
 
 const rightPaddle = {
     x: field.w - line.w - gapX,
-    y: 100,
+    y: 0,
     w: line.w,
     h: 200,
+    speed: 5,
     _move: function () {
-        this.y = ball.y
+        if (this.y + this.h / 2 < ball.y + ball.r) {
+            this.y += this.speed
+        } else {
+            this.y -= this.speed
+        }
+    },
+    speedUp: function () {
+        this.speed += 2
     },
     // desenhando a raquete Direita
     draw: function () {
@@ -59,8 +67,8 @@ const rightPaddle = {
 }
 
 const score = {
-    human: 1,
-    computer: 2,
+    human: 0,
+    computer: 0,
     increaseHuman: function () {
         this.human++
     },
@@ -82,15 +90,17 @@ const ball = {
     x: 0,
     y: 0,
     r: 20,
-    speed: 10,
+    speed: 5,
     directionX: 1,
     directionY: 1,
-
     _calcPosition: function () {
         // Veridica se o jogador 1 fez o ponto (x > largura do campo)
         if (this.x > field.w - this.r - rightPaddle.w - gapX) {
             // Verifica se a raquete direita está na posição y da bola
-            if (this.y + this.r > rightPaddle.y && this.y - this.r < rightPaddle.y + rightPaddle.h) {
+            if (
+                this.y + this.r > rightPaddle.y &&
+                this.y - this.r < rightPaddle.y + rightPaddle.h
+            ) {
                 // rebate a bola invertendo o sinal de x
                 this._reverseX()
             } else {
@@ -103,7 +113,10 @@ const ball = {
         // verifica se o jogador 2 fez ponto
         if (this.x < this.r + leftPaddle.w + gapX) {
             // verifica se a a raquete esquerta está na posição y da bola
-            if (this.y + this.r > leftPaddle.y && this.y - this.r < leftPaddle.y + leftPaddle.h) {
+            if (
+                this.y + this.r > leftPaddle.y &&
+                this.y - this.r < leftPaddle.y + leftPaddle.h
+            ) {
                 // rebate a bola invertendo o sinal de x
                 this._reverseX()
             } else {
@@ -125,10 +138,16 @@ const ball = {
         this.directionX *= -1
     },
     _reverseY: function () {
-        this.directionY = this.directionY * -1
+        this.directionY *= -1
+    },
+    _speedUp: function () {
+        this.speed += 3
     },
     _pointUp: function () {
-        this.y = field.w / 2
+        this._speedUp()
+        rightPaddle.speedUp()
+
+        this.x = field.w / 2
         this.y = field.h / 2
     },
     _move: function () {
