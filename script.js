@@ -101,6 +101,16 @@ const ball = {
         }
 
         // verifica se o jogador 2 fez ponto
+        if (this.x < this.r + leftPaddle.w + gapX) {
+            // verifica se a a raquete esquerta está na posição y da bola
+            if (this.y + this.r > leftPaddle.y && this.y - this.r < leftPaddle.y + leftPaddle.h) {
+                // rebate a bola invertendo o sinal de x
+                this._reverseX()
+            } else {
+                score.increaseComputer()
+                this._pointUp()
+            }
+        }
 
         // Verifica as laterais superiores e inferiores do campo
         if (
