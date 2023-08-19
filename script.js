@@ -61,6 +61,12 @@ const rightPaddle = {
 const score = {
     human: 1,
     computer: 2,
+    increaseHuman: function () {
+        this.human++
+    },
+    increaseComputer: function () {
+        this.computer++
+    },
     draw: function () {
         // desenhando o placar
         canvasCtx.font = 'bold 72px Arial'
@@ -79,7 +85,23 @@ const ball = {
     speed: 10,
     directionX: 1,
     directionY: 1,
+
     _calcPosition: function () {
+        // Veridica se o jogador 1 fez o ponto (x > largura do campo)
+        if (this.x > field.w - this.r - rightPaddle.w - gapX) {
+            // Verifica se a raquete direita está na posição y da bola
+            if (this.y + this.r > rightPaddle.y && this.y - this.r < rightPaddle.y + rightPaddle.h) {
+                // rebate a bola invertendo o sinal de x
+                this._reverseX()
+            } else {
+                //pontuar o jogador 1
+                score.increaseHuman()
+                this._pointUp()
+            }
+        }
+
+        // verifica se o jogador 2 fez ponto
+
         // Verifica as laterais superiores e inferiores do campo
         if (
             (this.y - this.r < 0 && this.directionY < 0) ||
@@ -94,6 +116,10 @@ const ball = {
     },
     _reverseY: function () {
         this.directionY = this.directionY * -1
+    },
+    _pointUp: function () {
+        this.y = field.w / 2
+        this.y = field.h / 2
     },
     _move: function () {
         this.x += this.directionX * this.speed
